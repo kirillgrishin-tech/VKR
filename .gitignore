@@ -1,6 +1,9 @@
 __pycache__/
+build/
+dist/
 *.dbf
 *.shp
 *.shx
 *.tiff
 *.tif
+*.ico
