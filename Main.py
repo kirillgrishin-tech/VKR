@@ -15,17 +15,20 @@ class ThreadSearch(threading.Thread):
         self.City = city
 
     def run(self):
-        application.ui.SearchButton.setEnabled(False)
-        avb = Search(self.City)
-        w = shapefile.Writer('cities.shp',shapeType=1)
-        w.field("Местность","C")
-        for i in range(len(avb)):
-            w.point(float(avb[i][2]),float(avb[i][3]))
-            w.record(self.avb[i][0])
-        w.close()
-        b= TaskModel(avb)
-        application.ui.table_search.setModel(self.b)
-        application.ui.SearchButton.setEnabled(True)
+        try:
+            application.ui.SearchButton.setEnabled(False)
+            avb = Search(self.City)
+            w = shapefile.Writer('cities.shp',shapeType=1)
+            w.field("Местность","C")
+            for i in range(len(avb)):
+                w.point(float(avb[i][2]),float(avb[i][3]))
+                w.record(self.avb[i][0])
+            w.close()
+            b= TaskModel(avb)
+            application.ui.table_search.setModel(self.b)
+            application.ui.SearchButton.setEnabled(True)
+        finally:
+            application.ui.SearchButton.setEnabled(True)
     
 class ThreadNDVI(threading.Thread):
     def __init__(self, brwNIR,brwRED,mini,maxi):
