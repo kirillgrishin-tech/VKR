@@ -22,7 +22,7 @@ class ThreadSearch(threading.Thread):
             w.field("Местность","C")
             for i in range(len(avb)):
                 w.point(float(avb[i][2]),float(avb[i][3]))
-                w.record(self.avb[i][0])
+                w.record(avb[i][0])
             w.close()
             b= TaskModel(avb)
             application.ui.table_search.setModel(self.b)
