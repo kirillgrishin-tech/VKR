@@ -74,7 +74,6 @@ def Search(area):
         key = '02e0341d-e46f-4718-b425-82a41231ad4c'
         for i in range(len(summ)):
             [summ[i][2],summ[i][3]] = coordinates(key,summ[i][0])
-        browser.close()
     finally:
         browser.close()
     return summ
