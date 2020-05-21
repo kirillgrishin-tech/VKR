@@ -25,7 +25,7 @@ class ThreadSearch(threading.Thread):
                 w.record(avb[i][0])
             w.close()
             b= TaskModel(avb)
-            application.ui.table_search.setModel(self.b)
+            application.ui.table_search.setModel(b)
             application.ui.SearchButton.setEnabled(True)
         finally:
             application.ui.SearchButton.setEnabled(True)
