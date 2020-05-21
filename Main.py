@@ -6,7 +6,39 @@ from MainForm_ui import Ui_MainWindow
 from search import Search
 from rastr import Rastr
 import shapefile
+import threading
 import sys
+
+class ThreadSearch(threading.Thread):
+    def __init__(self, city):
+        super().__init__()
+        self.City = city
+
+    def run(self):
+        application.ui.SearchButton.setEnabled(False)
+        avb = Search(self.City)
+        w = shapefile.Writer('cities.shp',shapeType=1)
+        w.field("Местность","C")
+        for i in range(len(avb)):
+            w.point(float(avb[i][2]),float(avb[i][3]))
+            w.record(self.avb[i][0])
+        w.close()
+        b= TaskModel(avb)
+        application.ui.table_search.setModel(self.b)
+        application.ui.SearchButton.setEnabled(True)
+    
+class ThreadNDVI(threading.Thread):
+    def __init__(self, brwNIR,brwRED,mini,maxi):
+        super().__init__()
+        self.BrwNIR = brwNIR
+        self.BrwRED = brwRED
+        self.Min = mini
+        self.Max = maxi
+
+    def run(self):
+        application.ui.NDVIButton.setEnabled(False)
+        Rastr(self.BrwNIR,self.BrwRED,self.Min,self.Max)
+        application.ui.NDVIButton.setEnabled(True)
 
 class TaskModel(QtCore.QAbstractTableModel):
     def __init__(self, tasks):
@@ -51,15 +83,8 @@ class mywindow(QtWidgets.QMainWindow):
     
     def on_search(self):
         if len(self.ui.SearchEdit.text())>0:
-            self.avb = Search(self.ui.SearchEdit.text())
-            w = shapefile.Writer('cities.shp',shapeType=1)
-            w.field("Местность","C")
-            for i in range(len(self.avb)):
-                w.point(float(self.avb[i][2]),float(self.avb[i][3]))
-                w.record(self.avb[i][0])
-            w.close()
-            self.b= TaskModel(self.avb)
-            self.ui.table_search.setModel(self.b)
+            ThSearch = ThreadSearch(self.ui.SearchEdit.text())
+            ThSearch.start()
         else:
             self.Error(0)
 
@@ -88,7 +113,8 @@ class mywindow(QtWidgets.QMainWindow):
 
     def on_NDVI(self):
         if len(self.ui.BrwEditNir.text())>0 and len(self.ui.BrwEditRed.text())>0 and len(self.ui.MinEdit.text())>0 and len(self.ui.MaxEdit.text())>0:
-            Rastr(self.ui.BrwEditNir.text(),self.ui.BrwEditRed.text(),float(self.ui.MinEdit.text()),float(self.ui.MaxEdit.text()))
+            ThNDVI = ThreadNDVI(self.ui.BrwEditNir.text(),self.ui.BrwEditRed.text(),float(self.ui.MinEdit.text()),float(self.ui.MaxEdit.text()))
+            ThNDVI.start()
         else:
             if len(self.ui.BrwEditNir.text())==0:
                 self.Error(1)

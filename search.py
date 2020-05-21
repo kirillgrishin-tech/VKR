@@ -34,7 +34,7 @@ def Search(area):
     fgh = browser.find_elements_by_xpath("/html/body/div[2]/div/div[3]/button[2]")
     if len(fgh)>0:
         fgh[0].click()
-    time.sleep(3)
+    time.sleep(5)
     browser.find_element_by_xpath("/html/body/div[1]/div/div[3]/div/div[3]/div[1]/div/div[2]/div/div/div[2]/div[1]/div/button/span").click()
     time.sleep(2)
     browser.find_element_by_xpath("/html/body/div[2]/div/div/div[4]").click()

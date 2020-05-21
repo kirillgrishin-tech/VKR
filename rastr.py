@@ -2,9 +2,9 @@ import rasterio
 from rasterio import plot
 import matplotlib.pyplot as plt
 import numpy as np
-np.seterr(divide='ignore', invalid='ignore')
 
 def Rastr(b4,b5,mini,maxi):
+    np.seterr(divide='ignore', invalid='ignore')
     band4 = rasterio.open(b4) 
     band5 = rasterio.open(b5)
     band4.height
